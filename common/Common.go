@@ -125,6 +125,17 @@ func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 		value := object.(time.Time)
 		result = &value
 	case "*string":
+		value := *(object.(*string))
+		if value == "now" {
+			result = GetTimeNow()
+		} else if value == "zero" {
+			result = GetTimeZero()
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+		
 		if decimal_places < 0 || decimal_places > 9 {
 			errors = append(errors, fmt.Errorf("error: common.GetTime decimal places not supported [0,9] actual %d", decimal_places))
 			return nil, errors
@@ -207,14 +218,19 @@ func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 			return result, nil
 		}
 
-		if *(object.(*string)) == "now" {
-			result = GetTimeNow()
-		} else if *(object.(*string)) == "zero" {
-			result = GetTimeZero()
-		} else {
-			errors = append(errors,  fmt.Errorf("error: common.GetTimeNow value not supported %s", *(object.(*string))))
-		}
+		errors = append(errors,  fmt.Errorf("error: common.GetTimeNow value not supported %s", *(object.(*string))))
 	case "string":
+		value := (object.(string))
+		if value == "now" {
+			result = GetTimeNow()
+		} else if value == "zero" {
+			result = GetTimeZero()
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+		
 		if decimal_places < 0 || decimal_places > 9 {
 			errors = append(errors, fmt.Errorf("error: common.GetTime decimal places not supported [0,9] actual %d", decimal_places))
 			return nil, errors
@@ -296,15 +312,8 @@ func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 		if !IsNil(result) {
 			return result, nil
 		}
-
-		if (object.(string)) == "now" {
-			result = GetTimeNow()
-		} else if (object.(string)) == "zero" {
-			result = GetTimeZero()
-		} else {
-			errors = append(errors,  fmt.Errorf("error: common.GetTimeNow value not supported %s", *(object.(*string))))
-		}
-
+		
+		errors = append(errors,  fmt.Errorf("error: common.GetTimeNow value not supported %s", *(object.(*string))))
 	default:
 		errors = append(errors, fmt.Errorf("error: json.Map.GetTime: type %s is not supported please implement", rep))
 	}
