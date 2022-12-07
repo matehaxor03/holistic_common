@@ -206,7 +206,7 @@ func Contains(sl []string, name string) bool {
 }
 
 func GetTimeNow() *time.Time {
-	now := time.Now()
+	now := time.Now().UTC()
 	return &now
 }
 
