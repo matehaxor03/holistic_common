@@ -240,10 +240,12 @@ func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 		value := (object.(string))
 		if value == "now" {
 			result = GetTimeNow()
-		} else if value == "zero" {
-			result = GetTimeZero()
+		} else {
+			_, zero_map_value_found := zero_mapping[value]
+			if zero_map_value_found {
+				result = GetTimeZero()
+			}
 		}
-
 		if !IsNil(result) {
 			return result, nil
 		}
