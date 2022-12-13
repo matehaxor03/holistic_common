@@ -116,6 +116,20 @@ func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 		return nil, nil
 	}
 
+	// time package does not allow zeroes and (so it should!, database allows zero)
+	zero_mapping := map[string]int{"zero":0, 
+		"0000-00-00 00:00:00.000000000":0, 
+		"0000-00-00 00:00:00.00000000":0, 
+		"0000-00-00 00:00:00.0000000":0, 
+		"0000-00-00 00:00:00.000000":0, 
+		"0000-00-00 00:00:00.00000":0, 
+		"0000-00-00 00:00:00.0000":0, 
+		"0000-00-00 00:00:00.000":0, 
+		"0000-00-00 00:00:00.00":0, 
+		"0000-00-00 00:00:00.0":0, 
+		"0000-00-00 00:00:00":0, 
+	} 
+
 	rep := fmt.Sprintf("%T", object)
 	switch rep {
 	case "*time.Time":
@@ -128,8 +142,11 @@ func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 		value := *(object.(*string))
 		if value == "now" {
 			result = GetTimeNow()
-		} else if value == "zero" {
-			result = GetTimeZero()
+		} else {
+			_, zero_map_value_found := zero_mapping[value]
+			if zero_map_value_found {
+				result = GetTimeZero()
+			}
 		}
 
 		if !IsNil(result) {
