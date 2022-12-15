@@ -108,6 +108,21 @@ func IsTime(object interface{}, decimal_places int) bool {
 	return true
 }
 
+
+func IsMap(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	if type_of == "json.Map" || type_of == "*json.Map" {
+		return true
+	}
+
+	return true
+}
+
+
 func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 	var errors []error
 	var result *time.Time
