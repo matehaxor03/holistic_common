@@ -7,6 +7,9 @@ import (
 	"math/rand"
 )
 
+func GetDataDirectory() string {
+	return "/Volumes/ramdisk"
+}
 
 func EscapeString(value string, string_quote_value string) (string, error) {
 	if !(string_quote_value == "'" || string_quote_value == "\"") {
