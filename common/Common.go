@@ -428,3 +428,21 @@ func GetTimeNowString(decimal_places int) (*string, []error) {
 	}
 	return &result, nil
 }
+
+func GetTimeZeroStringSQL(decimal_places int) (*string, []error) {
+	var errors []error
+	if decimal_places < 0 || decimal_places > 9 {
+		errors = append(errors, fmt.Errorf("error: common.GetTimeZeroString decimal places not support [0,9]: %d", decimal_places))
+		return nil, errors
+	}
+
+	result := "0000-00-00 00:00:00"
+	if decimal_places > 0 {
+		result += "."
+		for i := 0; i < decimal_places; i++ {
+			result += "0"
+		}
+	}
+
+	return &result, nil
+}
