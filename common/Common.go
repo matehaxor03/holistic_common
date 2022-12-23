@@ -7,8 +7,9 @@ import (
 	"math/rand"
 )
 
-func GetDataDirectory() string {
-	return "/Volumes/ramdisk"
+func GetDataDirectory() []string {
+	directory := []string{"Volumes", "ramdisk"}
+	return directory
 }
 
 func EscapeString(value string, string_quote_value string) (string, error) {
