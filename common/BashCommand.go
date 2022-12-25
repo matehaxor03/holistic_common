@@ -48,7 +48,7 @@ func NewBashCommand() *BashCommand {
 					text := strings.TrimSpace(string(stdout_scanner.Text()))
 					stdout_array = append(stdout_array, text)
 					if stdout_callback != nil {
-						(*stdout_callback)(text)
+						go (*stdout_callback)(text)
 					}
 				}
 				wg_stdout.Done()
@@ -68,7 +68,7 @@ func NewBashCommand() *BashCommand {
 					temp_error := fmt.Errorf(text)
 					stderr_array = append(stderr_array, fmt.Errorf(text))
 					if stderr_callback != nil {
-						(*stderr_callback)(temp_error)
+						go (*stderr_callback)(temp_error)
 					}
 				}
 				wg_stderr.Done()
