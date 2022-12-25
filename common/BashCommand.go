@@ -35,11 +35,13 @@ func NewBashCommand() *BashCommand {
 				return nil, errors
 			}
 
-		
+			const maxCapacity = 10*1024*1024  
 			
 			var wg_stdout sync.WaitGroup
 			wg_stdout.Add(1)
 			stdout_scanner := bufio.NewScanner(cmd_stdout_reader)
+			stdout_scanner_buffer := make([]byte, maxCapacity)
+			stdout_scanner.Buffer(stdout_scanner_buffer, maxCapacity)
 			stdout_scanner.Split(bufio.ScanLines)
 			go func() {
 				for stdout_scanner.Scan() {
@@ -55,6 +57,8 @@ func NewBashCommand() *BashCommand {
 			var wg_stderr sync.WaitGroup
 			wg_stderr.Add(1)
 			stderr_scanner := bufio.NewScanner(cmd_stderr_reader)
+			stderr_scanner_buffer := make([]byte, maxCapacity)
+			stderr_scanner.Buffer(stderr_scanner_buffer, maxCapacity)
 			stderr_scanner.Split(bufio.ScanLines)
 			go func() {
 				for stderr_scanner.Scan() {
