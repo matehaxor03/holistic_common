@@ -35,11 +35,13 @@ func NewBashCommand() *BashCommand {
 				return nil, errors
 			}
 
-			var wg_stdout sync.WaitGroup
-			var wg_stderr sync.WaitGroup
+		
 			
+			var wg_stdout sync.WaitGroup
+			wg_stdout.Add(1)
 			stdout_scanner := bufio.NewScanner(cmd_stdout_reader)
 			go func() {
+				wg_stdout.Done()
 				for stdout_scanner.Scan() {
 					wg_stdout.Add(1)
 					text := strings.TrimSpace(stdout_scanner.Text())
@@ -51,9 +53,11 @@ func NewBashCommand() *BashCommand {
 				}
 			}()
 
-
+			var wg_stderr sync.WaitGroup
+			wg_stderr.Add(1)
 			stderr_scanner := bufio.NewScanner(cmd_stderr_reader)
 			go func() {
+				wg_stderr.Done()
 				for stderr_scanner.Scan() {
 					wg_stderr.Add(1)
 					text := strings.TrimSpace(stderr_scanner.Text())
