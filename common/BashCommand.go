@@ -60,8 +60,10 @@ func NewBashCommand() *BashCommand {
 			stderr_scanner_buffer := make([]byte, maxCapacity)
 			stderr_scanner.Buffer(stderr_scanner_buffer, maxCapacity)
 			stderr_scanner.Split(bufio.ScanLines)
+			var errors_found = false
 			go func() {
 				for stderr_scanner.Scan() {
+					errors_found = true
 					text := strings.TrimSpace(string(stderr_scanner.Text()))
 					temp_error := fmt.Errorf(text)
 					stderr_array = append(stderr_array, fmt.Errorf(text))
@@ -88,8 +90,10 @@ func NewBashCommand() *BashCommand {
 			}
 
 			wg_stdout.Wait()
-			wg_stderr.Wait()
-			
+			if errors_found {
+				wg_stderr.Wait()
+			}
+		
 			if len(errors) > 0 {
 				return nil, errors
 			}
