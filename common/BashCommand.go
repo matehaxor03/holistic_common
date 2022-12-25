@@ -1,45 +1,98 @@
 package common
 
 import (
-	"bytes"
 	"fmt"
 	"os/exec"
 	"strings"
+	"sync"
+	"bufio"
 )
 
 type BashCommand struct {
-	ExecuteUnsafeCommand func(command string) (*string, []error)
+	ExecuteUnsafeCommand func(command string, stdout_callback *func(message string), stderr_callback *func(message error)) (*[]string, []error)
 }
 
 func NewBashCommand() *BashCommand {
 	x := BashCommand{
-		ExecuteUnsafeCommand: func(command string) (*string, []error) {
+		ExecuteUnsafeCommand: func(command string, stdout_callback *func(message string), stderr_callback *func(message error)) (*[]string, []error) {
 			var errors []error
-
-			var stdout bytes.Buffer
-			var stderr bytes.Buffer
+			stdout_array := []string{}
+			stderr_array := []error{}
 
 			cmd := exec.Command("bash", "-c", command)
-			cmd.Stdout = &stdout
-			cmd.Stderr = &stderr
-			command_err := cmd.Run()
 
-			shell_output := stdout.String()
-			shell_output_errs := stderr.String()
-
-			if command_err != nil {
-				errors = append(errors, command_err)
+			cmd_stdout_reader, cmd_stdout_reader_error := cmd.StdoutPipe()
+			if cmd_stdout_reader_error != nil {
+				errors = append(errors, cmd_stdout_reader_error)
 			}
 
-			if strings.TrimSpace(shell_output_errs) != "" {
-				errors = append(errors, fmt.Errorf("error: %s", fmt.Sprintf(strings.TrimSpace(shell_output_errs))))
+			cmd_stderr_reader, cmd_stderr_reader_error := cmd.StderrPipe()
+			if cmd_stderr_reader_error != nil {
+				errors = append(errors, cmd_stderr_reader_error)
 			}
 
 			if len(errors) > 0 {
-				return &shell_output, errors
+				return nil, errors
 			}
 
-			return &shell_output, nil
+			var wg sync.WaitGroup
+			wg.Add(1)
+			wg.Add(1)
+
+			stdout_scanner := bufio.NewScanner(cmd_stdout_reader)
+			go func() {
+				for stdout_scanner.Scan() {
+					text := strings.TrimSpace(stdout_scanner.Text())
+					stdout_array = append(stdout_array, text)
+					if stdout_callback != nil {
+						(*stdout_callback)(text)
+					}
+				}
+				wg.Done()
+			}()
+
+
+			stderr_scanner := bufio.NewScanner(cmd_stderr_reader)
+			go func() {
+				for stderr_scanner.Scan() {
+					text := strings.TrimSpace(stderr_scanner.Text())
+					temp_error := fmt.Errorf(text)
+					stderr_array = append(stderr_array, fmt.Errorf(text))
+					if stderr_callback != nil {
+						(*stderr_callback)(temp_error)
+					}
+				}
+				wg.Done()
+			}()
+
+
+			command_start_err := cmd.Start()
+			if command_start_err != nil {
+				errors = append(errors, command_start_err)
+			}
+			
+			if len(errors) > 0 {
+				return nil, errors
+			}
+
+			command_wait_err := cmd.Wait()
+			if command_wait_err != nil {
+				errors = append(errors, command_wait_err)
+			}
+			
+			if len(errors) > 0 {
+				return nil, errors
+			}
+
+			wg.Wait()
+
+			errors = append(errors, stderr_array...)
+
+			if len(errors) > 0 {
+				return &stdout_array, errors
+			}
+
+			return &stdout_array, nil
 		},
 	}
 
