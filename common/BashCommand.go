@@ -39,76 +39,32 @@ func NewBashCommand() *BashCommand {
 			
 			var wg_stdout sync.WaitGroup
 			wg_stdout.Add(1)
-			stdout_reader := bufio.NewReader(cmd_stdout_reader)
-
+			stdout_scanner := bufio.NewScanner(cmd_stdout_reader)
+			stdout_scanner.Split(bufio.ScanLines)
 			go func() {
-				stdout_bytes := []byte{}
-				for {
-					line, isPrefix, stdout_reader_error := stdout_reader.ReadLine()
-					if stdout_reader_error != nil {
-						errors = append(errors, stdout_reader_error)
-						break
-					}
-					stdout_bytes = append(stdout_bytes, line...)
-					if !isPrefix {
-						text := strings.TrimSpace(string(stdout_bytes))
-						if stdout_callback != nil {
-							(*stdout_callback)(text)
-						}
-						
-						if len(text) > 0 {
-							stdout_bytes = []byte{}
-						}
-					}
-				}
-				
-			/*for stdout_scanner.Scan() {
-					text := strings.TrimSpace(stdout_scanner.Text())
+				for stdout_scanner.Scan() {
+					text := strings.TrimSpace(string(stdout_scanner.Text()))
 					stdout_array = append(stdout_array, text)
 					if stdout_callback != nil {
 						(*stdout_callback)(text)
 					}
-				}*/
+				}
 				wg_stdout.Done()
 			}()
 
 			var wg_stderr sync.WaitGroup
 			wg_stderr.Add(1)
-			stderr_reader := bufio.NewReader(cmd_stderr_reader)
-
+			stderr_scanner := bufio.NewScanner(cmd_stderr_reader)
+			stderr_scanner.Split(bufio.ScanLines)
 			go func() {
-				stderr_bytes := []byte{}
-				for {
-					line, isPrefix, stderr_reader_error := stderr_reader.ReadLine()
-					if stderr_reader_error != nil {
-						errors = append(errors, stderr_reader_error)
-						break
-					}
-					stderr_bytes = append(stderr_bytes, line...)
-					if !isPrefix {
-						text := strings.TrimSpace(string(stderr_bytes))
-						
-						if stderr_callback != nil {
-							(*stderr_callback)(fmt.Errorf(text))
-						}
-						
-						if len(text) > 0 {
-							stderr_bytes = []byte{}
-						}
-					}
-				}
-
-				 /* 
 				for stderr_scanner.Scan() {
-					
-
-					text := strings.TrimSpace(stderr_scanner.Text())
+					text := strings.TrimSpace(string(stderr_scanner.Text()))
 					temp_error := fmt.Errorf(text)
 					stderr_array = append(stderr_array, fmt.Errorf(text))
 					if stderr_callback != nil {
 						(*stderr_callback)(temp_error)
 					}
-				}*/
+				}
 				wg_stderr.Done()
 			}()
 
