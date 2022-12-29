@@ -126,6 +126,19 @@ func IsMap(object interface{}) bool {
 	return true
 }
 
+func IsArray(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	if type_of == "json.Array" || type_of == "*json.Array" {
+		return true
+	}
+
+	return true
+}
+
 
 func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 	var errors []error
