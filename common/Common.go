@@ -153,6 +153,38 @@ func IsBool(object interface{}) bool {
 	return true
 }
 
+func IsBoolTrue(object interface{}) bool {
+	if !IsBool(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+		case "bool":
+			return object.(bool) == true
+		case "*bool":
+			return *(object.(*bool)) == true
+		default:
+			return false
+	}
+}
+
+func IsBoolFalse(object interface{}) bool {
+	if !IsBool(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+		case "bool":
+			return object.(bool) == false
+		case "*bool":
+			return *(object.(*bool)) == false
+		default:
+			return false
+	}
+}
+
 func IsArray(object interface{}) bool {
 	if IsNil(object) {
 		return false
