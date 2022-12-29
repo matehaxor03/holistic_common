@@ -123,7 +123,7 @@ func IsMap(object interface{}) bool {
 		return true
 	}
 
-	return true
+	return false
 }
 
 func IsString(object interface{}) bool {
@@ -136,7 +136,7 @@ func IsString(object interface{}) bool {
 		return true
 	}
 
-	return true
+	return false
 }
 
 
@@ -150,7 +150,7 @@ func IsBool(object interface{}) bool {
 		return true
 	}
 
-	return true
+	return false
 }
 
 func IsBoolTrue(object interface{}) bool {
@@ -195,7 +195,7 @@ func IsArray(object interface{}) bool {
 		return true
 	}
 
-	return true
+	return false
 }
 
 func IsInteger(object interface{}) bool {
