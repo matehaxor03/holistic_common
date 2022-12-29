@@ -139,6 +139,20 @@ func IsString(object interface{}) bool {
 	return true
 }
 
+
+func IsBool(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	if type_of == "bool" || type_of == "*bool" {
+		return true
+	}
+
+	return true
+}
+
 func IsArray(object interface{}) bool {
 	if IsNil(object) {
 		return false
