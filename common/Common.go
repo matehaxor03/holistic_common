@@ -166,6 +166,39 @@ func IsArray(object interface{}) bool {
 	return true
 }
 
+func IsInteger(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*int", 
+		  "int",
+		  "*uint", 
+		  "uint",
+		  "*int64",
+		  "int64",
+		  "*uint64",
+		  "uint64",
+		  "*int32",
+		  "int32",
+		  "*uint32",
+		  "uint32",
+		  "*int16",
+		  "int16",
+		  "*uint16",
+		  "uint16",
+		  "*int8",
+		  "int8",
+		  "*uint8",
+		  "uint8":
+		return true
+	default: 
+		return false
+	}
+}
+
 
 func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
 	var errors []error
