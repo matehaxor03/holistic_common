@@ -126,6 +126,19 @@ func IsMap(object interface{}) bool {
 	return true
 }
 
+func IsString(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	if type_of == "string" || type_of == "*string" {
+		return true
+	}
+
+	return true
+}
+
 func IsArray(object interface{}) bool {
 	if IsNil(object) {
 		return false
