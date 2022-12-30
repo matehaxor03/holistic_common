@@ -84,6 +84,10 @@ func IsNil(object interface{}) bool {
 		return true
 	}
 
+	if string_value == "nil" {
+		return true
+	}
+
 	if string_value == "map[]" {
 		return true
 	}
