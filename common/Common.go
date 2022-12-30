@@ -92,6 +92,10 @@ func IsNil(object interface{}) bool {
 		return true
 	}
 
+	if string_value == "&map[value:<nil>]" {
+		return true
+	}
+
 	rep := fmt.Sprintf("%T", object)
 
 	if string_value == "%!s("+rep+"=<nil>)" {
