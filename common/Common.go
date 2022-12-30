@@ -94,6 +94,10 @@ func IsNil(object interface{}) bool {
 		return true
 	}
 
+	if string_value == "&map[value:%!s(" + rep + "=<nil>)]" {
+		return true
+	}
+
 	return false
 }
 
