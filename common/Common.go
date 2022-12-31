@@ -114,7 +114,7 @@ func IsTime(object interface{}, decimal_places int) bool {
 		return false
 	}
 
-	time, time_errors := GetTime(object, decimal_places)
+	time, time_errors := GetTimeWithDecimalPlaces(object, decimal_places)
 	if time_errors != nil {
 		return false
 	} else if IsNil(time) {
@@ -243,8 +243,302 @@ func IsInteger(object interface{}) bool {
 	}
 }
 
+func GetTime(object interface{}) (*time.Time, []error) {
+	var errors []error
+	var result *time.Time
 
-func GetTime(object interface{}, decimal_places int) (*time.Time, []error) {
+	if object == nil {
+		return nil, nil
+	}
+
+	// time package does not allow zeroes and (so it should!, database allows zero)
+	zero_mapping := map[string]int{"zero":0, 
+		"0000-00-00 00:00:00.000000000":0, 
+		"0000-00-00 00:00:00.00000000":0, 
+		"0000-00-00 00:00:00.0000000":0, 
+		"0000-00-00 00:00:00.000000":0, 
+		"0000-00-00 00:00:00.00000":0, 
+		"0000-00-00 00:00:00.0000":0, 
+		"0000-00-00 00:00:00.000":0, 
+		"0000-00-00 00:00:00.00":0, 
+		"0000-00-00 00:00:00.0":0, 
+		"0000-00-00 00:00:00":0, 
+	} 
+
+	rep := fmt.Sprintf("%T", object)
+	switch rep {
+	case "*time.Time":
+		value := *(object.(*time.Time))
+		result = &value
+	case "time.Time":
+		value := object.(time.Time)
+		result = &value
+	case "*string":
+		value := *(object.(*string))
+		if value == "now" {
+			result = GetTimeNow()
+		} else {
+			_, zero_map_value_found := zero_mapping[value]
+			if zero_map_value_found {
+				result = GetTimeZero()
+			}
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+	
+		temp_time, temp_time_error := time.Parse("2006-01-02 15:04:05.000000000", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.00000000", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.0000000", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.000000", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.00000", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.0000", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.000", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.00", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.0", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05", *(object.(*string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+	
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		errors = append(errors,  fmt.Errorf("error: common.GetTimeNow value not supported %s", *(object.(*string))))
+	case "string":
+		value := (object.(string))
+		if value == "now" {
+			result = GetTimeNow()
+		} else {
+			_, zero_map_value_found := zero_mapping[value]
+			if zero_map_value_found {
+				result = GetTimeZero()
+			}
+		}
+		
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error := time.Parse("2006-01-02 15:04:05.000000000", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.00000000", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.0000000", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.000000", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.00000", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.0000", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.000", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.00", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05.0", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+
+		temp_time, temp_time_error = time.Parse("2006-01-02 15:04:05", (object.(string)))
+		if temp_time_error != nil {
+			errors = append(errors, fmt.Errorf("error: common.GetTime parsing error %s", fmt.Sprintf("%s",temp_time_error)))
+		} else {
+			result = &temp_time
+		}
+
+		if !IsNil(result) {
+			return result, nil
+		}
+		
+		errors = append(errors,  fmt.Errorf("error: common.GetTimeNow value not supported %s", *(object.(*string))))
+	default:
+		errors = append(errors, fmt.Errorf("error: json.Map.GetTime: type %s is not supported please implement", rep))
+	}
+
+	if len(errors) > 0 {
+		return nil, errors
+	}
+
+	return result, nil
+}
+
+
+func GetTimeWithDecimalPlaces(object interface{}, decimal_places int) (*time.Time, []error) {
 	var errors []error
 	var result *time.Time
 
