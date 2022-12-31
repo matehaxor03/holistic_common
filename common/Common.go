@@ -106,6 +106,12 @@ func IsNil(object interface{}) bool {
 		return true
 	}
 
+	string_value = strings.ReplaceAll(string_value, "<nil>", "")
+	string_value = strings.ReplaceAll(string_value, " ", "")
+	if strings.HasSuffix(string_value, "=&{})]") && strings.HasPrefix(string_value, "&map[value:%!s(") {
+		return true
+	}
+
 	return false
 }
 
