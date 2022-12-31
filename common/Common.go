@@ -96,6 +96,10 @@ func IsNil(object interface{}) bool {
 		return true
 	}
 
+	if string_value == "%!s(*json.Value=<nil>)" {
+		return true
+	}
+
 	rep := fmt.Sprintf("%T", object)
 
 	if string_value == "%!s("+rep+"=<nil>)" {
@@ -108,9 +112,17 @@ func IsNil(object interface{}) bool {
 
 	string_value = strings.ReplaceAll(string_value, "<nil>", "")
 	string_value = strings.ReplaceAll(string_value, " ", "")
-	if strings.HasSuffix(string_value, "=&{})]") && strings.HasPrefix(string_value, "&map[value:%!s(") {
+	
+	if strings.HasPrefix(string_value, "&map[value:%!s(")  && strings.HasSuffix(string_value, "=&{})]") {
 		return true
 	}
+
+	/*
+	if strings.HasPrefix(string_value, "%!s(*") && strings.HasSuffix(string_value, "=&{})]") {
+		return true
+	}*/
+
+	
 
 	return false
 }
