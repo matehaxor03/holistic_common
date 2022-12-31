@@ -793,6 +793,9 @@ func GetTimeWithDecimalPlaces(object interface{}, decimal_places int) (*time.Tim
 }
 
 func GetType(object interface{}) string {
+	if IsNil(object) {
+		return "nil"
+	}
 	return fmt.Sprintf("%T", object)
 }
 
