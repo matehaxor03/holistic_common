@@ -797,40 +797,6 @@ func GetType(object interface{}) string {
 		return "nil"
 	}
 	type_of := fmt.Sprintf("%T", object)
-
-	if strings.Contains(type_of, "%!s(int=") {
-		return "int"
-	}
-
-	if strings.Contains(type_of, "%!s(*int=") {
-		return "*int"
-	}
-
-	if strings.Contains(type_of, "%!s(int8=") {
-		return "int"
-	}
-
-	if strings.Contains(type_of, "%!s(*int8=") {
-		return "*int"
-	}
-
-	if strings.Contains(type_of, "%!s(int16=") {
-		return "int"
-	}
-
-	if strings.Contains(type_of, "%!s(*int16=") {
-		return "*int"
-	}
-
-	if strings.Contains(type_of, "%!s(uint=") {
-		return "uint"
-	}
-
-	if strings.Contains(type_of, "%!s(*uint=") {
-		return "uint"
-	}
-
-
 	return type_of
 }
 
