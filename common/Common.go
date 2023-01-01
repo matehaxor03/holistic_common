@@ -149,7 +149,7 @@ func IsMap(object interface{}) bool {
 	}
 
 	type_of := GetType(object)
-	if type_of == "json.Map" || type_of == "*json.Map" {
+	if type_of == "json.Map" || type_of == "*json.Map" || type_of == "**json.Map" {
 		return true
 	}
 
@@ -221,7 +221,7 @@ func IsArray(object interface{}) bool {
 	}
 
 	type_of := GetType(object)
-	if type_of == "json.Array" || type_of == "*json.Array" {
+	if type_of == "json.Array" || type_of == "*json.Array" ||  type_of == "**json.Array" {
 		return true
 	}
 
@@ -796,7 +796,42 @@ func GetType(object interface{}) string {
 	if IsNil(object) {
 		return "nil"
 	}
-	return fmt.Sprintf("%T", object)
+	type_of := fmt.Sprintf("%T", object)
+
+	if strings.Contains(type_of, "%!s(int=") {
+		return "int"
+	}
+
+	if strings.Contains(type_of, "%!s(*int=") {
+		return "*int"
+	}
+
+	if strings.Contains(type_of, "%!s(int8=") {
+		return "int"
+	}
+
+	if strings.Contains(type_of, "%!s(*int8=") {
+		return "*int"
+	}
+
+	if strings.Contains(type_of, "%!s(int16=") {
+		return "int"
+	}
+
+	if strings.Contains(type_of, "%!s(*int16=") {
+		return "*int"
+	}
+
+	if strings.Contains(type_of, "%!s(uint=") {
+		return "uint"
+	}
+
+	if strings.Contains(type_of, "%!s(*uint=") {
+		return "uint"
+	}
+
+
+	return type_of
 }
 
 func Contains(sl []string, name string) bool {
