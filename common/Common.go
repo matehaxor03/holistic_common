@@ -149,7 +149,7 @@ func IsMap(object interface{}) bool {
 	}
 
 	type_of := GetType(object)
-	if type_of == "json.Map" || type_of == "*json.Map" || type_of == "**json.Map" {
+	if type_of == "json.Map" || type_of == "*json.Map" {
 		return true
 	}
 
@@ -221,7 +221,7 @@ func IsArray(object interface{}) bool {
 	}
 
 	type_of := GetType(object)
-	if type_of == "json.Array" || type_of == "*json.Array" ||  type_of == "**json.Array" {
+	if type_of == "json.Array" || type_of == "*json.Array" {
 		return true
 	}
 
