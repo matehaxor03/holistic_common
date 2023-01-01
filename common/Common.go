@@ -215,6 +215,19 @@ func IsBoolFalse(object interface{}) bool {
 	}
 }
 
+func IsValue(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	if type_of == "json.Value" || type_of == "*json.Value" {
+		return true
+	}
+
+	return false
+}
+
 func IsArray(object interface{}) bool {
 	if IsNil(object) {
 		return false
@@ -227,6 +240,7 @@ func IsArray(object interface{}) bool {
 
 	return false
 }
+
 
 func IsInteger(object interface{}) bool {
 	if IsNil(object) {
