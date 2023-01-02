@@ -912,3 +912,16 @@ func GetTimeZeroStringSQL(decimal_places int) (*string, []error) {
 
 	return &result, nil
 }
+
+func MapPointerToStringArrayValueToInterface(a *[]string) *[]interface{} {
+	if IsNil(a) {
+		return nil
+	}
+
+	interface_array := make([]interface{}, len(*a))
+	for _, value := range *a {
+		interface_array = append(interface_array, value)
+	}
+	
+	return &interface_array
+}
