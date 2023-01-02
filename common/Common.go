@@ -242,6 +242,23 @@ func IsArray(object interface{}) bool {
 }
 
 
+func IsFloat(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+		case "*float32", 
+			"float32",
+			"*float64", 
+			"float64":
+		return true
+	default: 
+		return false
+	}
+}
+			
 func IsInteger(object interface{}) bool {
 	if IsNil(object) {
 		return false
@@ -273,6 +290,10 @@ func IsInteger(object interface{}) bool {
 	default: 
 		return false
 	}
+}
+
+func IsNumber(object interface{}) bool {
+	return IsInteger(object) || IsFloat(object)
 }
 
 func GetTime(object interface{}) (*time.Time, []error) {
