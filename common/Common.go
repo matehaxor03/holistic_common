@@ -918,7 +918,7 @@ func MapPointerToStringArrayValueToInterface(a *[]string) *[]interface{} {
 		return nil
 	}
 
-	interface_array := make([]interface{}, len(*a))
+	interface_array := make([]interface{}, 0)
 	for _, value := range *a {
 		interface_array = append(interface_array, value)
 	}
