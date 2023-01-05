@@ -3,7 +3,6 @@ package common
 import (
 	"fmt"
 	"os/exec"
-	"strings"
 	"sync"
 	"bufio"
 )
@@ -45,7 +44,7 @@ func NewBashCommand() *BashCommand {
 			stdout_scanner.Split(bufio.ScanLines)
 			go func() {
 				for stdout_scanner.Scan() {
-					text := strings.TrimSpace(string(stdout_scanner.Text()))
+					text := string(stdout_scanner.Text())
 					stdout_array = append(stdout_array, text)
 					if stdout_callback != nil {
 						go (*stdout_callback)(text)
@@ -64,7 +63,7 @@ func NewBashCommand() *BashCommand {
 			go func() {
 				for stderr_scanner.Scan() {
 					errors_found = true
-					text := strings.TrimSpace(string(stderr_scanner.Text()))
+					text := string(stderr_scanner.Text())
 					temp_error := fmt.Errorf(text)
 					stderr_array = append(stderr_array, fmt.Errorf(text))
 					if stderr_callback != nil {
