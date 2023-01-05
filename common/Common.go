@@ -114,19 +114,7 @@ func IsNil(object interface{}) bool {
 	
 	if strings.HasPrefix(string_value, "&map[value:%!s(")  && strings.HasSuffix(string_value, "=&{})]") {
 		return true
-	}
-
-	fmt.Println(string_value)
-	if !strings.Contains(string_value, "0x") {
-		return true
-	}
-
-	/*
-	if strings.HasPrefix(string_value, "%!s(*") && strings.HasSuffix(string_value, "=&{})]") {
-		return true
-	}*/
-
-	
+	}	
 
 	return false
 }
