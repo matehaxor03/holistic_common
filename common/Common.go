@@ -116,6 +116,7 @@ func IsNil(object interface{}) bool {
 		return true
 	}
 
+	fmt.Println(string_value)
 	if !strings.Contains(string_value, "0x") {
 		return true
 	}
