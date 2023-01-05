@@ -275,6 +275,10 @@ func IsFloat64(object interface{}) bool {
 		return false
 	}
 }
+
+func IsInteger(object interface{}) bool {
+	return IsInt(object) || IsUInt(object)
+}
 			
 func IsInt(object interface{}) bool {
 	if IsNil(object) {
