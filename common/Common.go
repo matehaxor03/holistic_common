@@ -276,32 +276,52 @@ func IsFloat64(object interface{}) bool {
 	}
 }
 			
-func IsInteger(object interface{}) bool {
+func IsInt(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	if IsInt8(object) || IsInt16(object) || IsInt32(object) || IsInt64(object) {
+		return true
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*int", 
+		  "int":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsUInt(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	if IsUInt8(object) || IsUInt16(object) || IsUInt32(object) || IsUInt64(object) {
+		return true
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*uint", 
+		  "uint":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsUInt8(object interface{}) bool {
 	if IsNil(object) {
 		return false
 	}
 
 	type_of := GetType(object)
 	switch type_of {
-	case "*int", 
-		  "int",
-		  "*uint", 
-		  "uint",
-		  "*int64",
-		  "int64",
-		  "*uint64",
-		  "uint64",
-		  "*int32",
-		  "int32",
-		  "*uint32",
-		  "uint32",
-		  "*int16",
-		  "int16",
-		  "*uint16",
-		  "uint16",
-		  "*int8",
-		  "int8",
-		  "*uint8",
+	case "*uint8",
 		  "uint8":
 		return true
 	default: 
@@ -309,8 +329,113 @@ func IsInteger(object interface{}) bool {
 	}
 }
 
+func IsUInt16(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*uint16",
+		  "uint16":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsUInt32(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*uint32",
+		  "uint32":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsUInt64(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*uint64",
+		  "uint64":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsInt8(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*int8",
+		  "int8":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsInt16(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*int16",
+		  "int16":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsInt32(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*int32",
+		  "int32":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsInt64(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+	case "*int64",
+		  "int64":
+		return true
+	default: 
+		return false
+	}
+}
+
 func IsNumber(object interface{}) bool {
-	return IsInteger(object) || IsFloat(object)
+	return IsInt(object) || IsFloat(object) || IsUInt(object)
 }
 
 func GetTime(object interface{}) (*time.Time, []error) {
