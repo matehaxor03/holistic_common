@@ -242,6 +242,11 @@ func IsArray(object interface{}) bool {
 
 
 func IsFloat(object interface{}) bool {
+	return IsFloat32(object) || IsFloat64(object)
+}
+
+
+func IsFloat32(object interface{}) bool {
 	if IsNil(object) {
 		return false
 	}
@@ -249,8 +254,21 @@ func IsFloat(object interface{}) bool {
 	type_of := GetType(object)
 	switch type_of {
 		case "*float32", 
-			"float32",
-			"*float64", 
+			"float32":
+		return true
+	default: 
+		return false
+	}
+}
+
+func IsFloat64(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := GetType(object)
+	switch type_of {
+		case "*float64", 
 			"float64":
 		return true
 	default: 
