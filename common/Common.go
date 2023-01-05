@@ -48,7 +48,7 @@ func CloneString(value *string) *string {
 func GenerateRandomLetters(length uint64, uppercase bool, lowercase bool) (string) {
 	rand.Seed(time.Now().UnixNano())
 	
-	var letters_to_use string
+	letters_to_use := ""
 	uppercase_letters :=  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	lowercase_letters := "abcdefghijklmnopqrstuvwxyz"
 
