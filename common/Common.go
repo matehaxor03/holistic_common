@@ -36,6 +36,8 @@ func EscapeString(value string, string_quote_value string) (string, error) {
 	return result.String(), nil
 }
 
+
+
 func CloneString(value *string) *string {
 	if value == nil {
 		return nil
@@ -70,6 +72,20 @@ func GenerateRandomLetters(length uint64, uppercase bool, lowercase bool) (strin
 	}
 
 	return sb.String()
+}
+
+func IsFunc(object interface{}) bool {
+	if IsNil(object) {
+		return false
+	}
+
+	type_of := fmt.Sprintf("%T", object)
+	if type_of == "*func(json.Map) []error" || 
+	   type_of == "func(json.Map) []error" {
+		return true
+	}
+
+	return false
 }
 
 func IsNil(object interface{}) bool {
