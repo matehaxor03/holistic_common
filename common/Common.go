@@ -45,19 +45,19 @@ func CloneString(value *string) *string {
 	return &temp
 }
 
-func GenerateRandomLetters(length uint64, upper_case *bool) (*string) {
+func GenerateRandomLetters(length uint64, uppercase bool, lowercase bool) (string) {
 	rand.Seed(time.Now().UnixNano())
 	
 	var letters_to_use string
 	uppercase_letters :=  "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	lowercase_letters := "abcdefghijklmnopqrstuvwxyz"
 
-	if upper_case == nil {
-		letters_to_use = uppercase_letters + lowercase_letters
-	} else if *upper_case {
-		letters_to_use = uppercase_letters
-	} else {
-		letters_to_use = lowercase_letters
+	if uppercase {
+		letters_to_use += uppercase_letters
+	} 
+
+	if lowercase {
+		letters_to_use += lowercase_letters
 	}
 
 	var sb strings.Builder
@@ -69,8 +69,7 @@ func GenerateRandomLetters(length uint64, upper_case *bool) (*string) {
 		sb.WriteByte(c)
 	}
 
-	value := sb.String()
-	return &value
+	return sb.String()
 }
 
 func IsNil(object interface{}) bool {
