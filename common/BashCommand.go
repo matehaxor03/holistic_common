@@ -91,13 +91,8 @@ func NewBashCommand() *BashCommand {
 			wg_stdout.Wait()
 			if errors_found {
 				wg_stderr.Wait()
+				errors = append(errors, stderr_array...)
 			}
-		
-			if len(errors) > 0 {
-				return nil, errors
-			}
-
-			errors = append(errors, stderr_array...)
 
 			if len(errors) > 0 {
 				return &stdout_array, errors
