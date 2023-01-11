@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	common.EscapeString("a'", true, "'")
+	common.EscapeString("a'", "'")
 }

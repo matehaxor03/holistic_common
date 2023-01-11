@@ -12,7 +12,7 @@ func GetDataDirectory() []string {
 	return directory
 }
 
-func EscapeString(value string, using_file bool, string_quote_value string) (string, error) {
+func EscapeString(value string, string_quote_value string) (string, error) {
 	if !(string_quote_value == "'" || string_quote_value == "\"") {
 		return "", fmt.Errorf(fmt.Sprintf("string_quote_value not supported: %s available values are ' or \"", string_quote_value))
 	}
@@ -28,7 +28,7 @@ func EscapeString(value string, using_file bool, string_quote_value string) (str
 		} else if current_value == string_quote_value {
 			result.WriteString("\\")
 			result.WriteString(current_value)
-		} else if current_value == "`" && !using_file {
+		} else if current_value == "`" {
 			result.WriteString("\\")
 			result.WriteString(current_value)
 		} else {
