@@ -134,6 +134,9 @@ func NewBashCommand() *BashCommand {
 					return nil, errors
 				}
 
+				fmt.Println(string(string_stdout))
+				fmt.Println(string(string_stderr))
+
 				string_stdout_lines := strings.Split(string(string_stdout), "\n")
 				for _, string_stdout_line := range string_stdout_lines {
 					stdout_array = append(stdout_array, string_stdout_line)
