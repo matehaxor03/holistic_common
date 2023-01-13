@@ -9,6 +9,7 @@ import (
 
 type BashCommand struct {
 	ExecuteUnsafeCommand func(command string, stdout_callback *func(message string), stderr_callback *func(message error)) (*[]string, []error)
+	ExecuteUnsafeCommandBackground func(command string)
 }
 
 func NewBashCommand() *BashCommand {
@@ -107,6 +108,10 @@ func NewBashCommand() *BashCommand {
 			}
 
 			return &stdout_array, nil
+		},
+		ExecuteUnsafeCommandBackground: func(command string) {
+			cmd := exec.Command("bash", "-c", command + " &")
+			cmd.Start()
 		},
 	}
 
