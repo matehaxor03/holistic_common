@@ -5,8 +5,8 @@ import (
 	"os/exec"
 	"sync"
 	"bufio"
-	"bytes"
 	"strings"
+	"io/ioutil"
 )
 
 type BashCommand struct {
@@ -97,26 +97,48 @@ func NewBashCommand() *BashCommand {
 					errors = append(errors, stderr_array...)
 				}
 			} else {
-				var stdout bytes.Buffer
-				cmd.Stdout = &stdout
-				var stderr bytes.Buffer
-				cmd.Stderr = &stderr
+				stdout, stdout_error := cmd.StdoutPipe()
+				if stdout_error != nil {
+					errors = append(errors, stdout_error)
+				}
+				stderr, stderr_error := cmd.StderrPipe()
+				if stderr_error != nil {
+					errors = append(errors, stderr_error)
+				}
+
+				if len(errors) > 0 {
+					return nil, errors
+				}
 			
 				command_errors := cmd.Start()
 				if command_errors != nil {
 					errors = append(errors, command_errors)
 				}
+
+				if len(errors) > 0 {
+					return nil, errors
+				}
 				cmd.Wait()
 
-				string_stdout := string(stdout.Bytes())
-				string_stderr := string(stderr.Bytes())
+				string_stdout, string_stdout_errors := ioutil.ReadAll(stdout)
+				if string_stdout_errors != nil {
+					errors = append(errors, string_stdout_errors)
+				}
+				string_stderr, string_stderr_errors := ioutil.ReadAll(stderr)
+				if string_stderr_errors != nil {
+					errors = append(errors, string_stderr_errors)
+				}
 
-				string_stdout_lines := strings.Split(string_stdout, "\n")
+				if len(errors) > 0 {
+					return nil, errors
+				}
+
+				string_stdout_lines := strings.Split(string(string_stdout), "\n")
 				for _, string_stdout_line := range string_stdout_lines {
 					stdout_array = append(stdout_array, string_stdout_line)
 				}
 
-				string_stderr_lines := strings.Split(string_stderr, "\n")
+				string_stderr_lines := strings.Split(string(string_stderr), "\n")
 				for _, string_stderr_line := range string_stderr_lines {
 					errors = append(errors, fmt.Errorf("%s", string_stderr_line))
 				}
