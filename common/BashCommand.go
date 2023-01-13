@@ -102,10 +102,11 @@ func NewBashCommand() *BashCommand {
 				var stderr bytes.Buffer
 				cmd.Stderr = &stderr
 			
-				command_errors := cmd.Run()
+				command_errors := cmd.Start()
 				if command_errors != nil {
 					errors = append(errors, command_errors)
 				}
+				cmd.Wait()
 
 				string_stdout := string(stdout.Bytes())
 				string_stderr := string(stderr.Bytes())
