@@ -118,8 +118,7 @@ func NewBashCommand() *BashCommand {
 				if len(errors) > 0 {
 					return nil, errors
 				}
-				cmd.Wait()
-
+			
 				string_stdout, string_stdout_errors := ioutil.ReadAll(stdout)
 				if string_stdout_errors != nil {
 					errors = append(errors, string_stdout_errors)
@@ -128,6 +127,8 @@ func NewBashCommand() *BashCommand {
 				if string_stderr_errors != nil {
 					errors = append(errors, string_stderr_errors)
 				}
+
+				cmd.Wait()
 
 				if len(errors) > 0 {
 					return nil, errors
