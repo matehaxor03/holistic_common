@@ -72,7 +72,7 @@ func NewBashCommand() *BashCommand {
 			if absolute_path_filename == nil {
 				return nil, fmt.Errorf("absolute_path_filename is nil")
 			}
-			delete_files.PushFront(*absolute_path_filename)
+			delete_files.PushFront(absolute_path_filename)
 			wakeup_delete_file_processor()
 			return nil, nil
 		} else if mode == "pull" {
