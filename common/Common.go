@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 	"math/rand"
+	crypto_rand "crypto/rand"
 )
 
 func GetDataDirectory() []string {
@@ -1082,4 +1083,15 @@ func MapPointerToStringArrayValueToInterface(a *[]string) *[]interface{} {
 	}
 	
 	return &interface_array
+}
+
+func GenerateGuid() string {
+	byte_array := make([]byte, 16)
+	crypto_rand.Read(byte_array)
+	guid := fmt.Sprintf("%X-%X-%X-%X-%X", byte_array[0:4], byte_array[4:6], byte_array[6:8], byte_array[8:10], byte_array[10:])
+	return guid
+}
+
+func GenerateTraceId(message_count uint64, label string) string {
+	return fmt.Sprintf("%v-%s-%d-%s", time.Now().UnixNano(), GenerateGuid(), message_count, label)
 }
