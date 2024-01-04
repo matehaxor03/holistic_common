@@ -1,0 +1,12 @@
+package common
+
+import (
+)
+
+func ENV_DATABASE_ROOT_USERNAME() string {
+	return "HOLISTIC_DATABASE_ROOT_USERNAME"
+}
+
+func ENV_DATABASE_ROOT_PASSWORD() string {
+	return "HOLISTIC_DATABASE_ROOT_PASSWORD"
+}
