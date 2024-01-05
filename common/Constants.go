@@ -22,3 +22,18 @@ func ENV_HOLISTIC_DATABASE_ROOT_USERNAME() string {
 func ENV_HOLISTIC_DATABASE_ROOT_PASSWORD() string {
 	return "HOLISTIC_DATABASE_ROOT_PASSWORD"
 }
+
+func CONSTANT_HOLISTIC_DATABASE_MIGRATION_USERNAME() string {
+	return "holistic_mig"
+}
+
+func CONSTANT_HOLISTIC_DATABASE_WRITE_USERNAME() string {
+	return "holistic_w"
+}
+
+func CONSTANT_HOLISTIC_DATABASE_READ_USERNAME() string {
+	return "holistic_r"
+}
+
+
+
