@@ -15,7 +15,7 @@ type BashCommand struct {
 	ExecuteUnsafeCommandBackground func(command string)
 	ExecuteUnsafeCommandUsingFiles func(command string, command_data string) ([]string, []error)
 	ExecuteUnsafeCommandUsingFilesWithoutInputFile func(command string) ([]string, []error)
-	ExecuteUnsafeCommandSimple func(command string)
+	ExecuteUnsafeCommandSimple func(command string) ([]error)
 }
 
 func NewBashCommand() *BashCommand {
@@ -37,10 +37,25 @@ func NewBashCommand() *BashCommand {
 		}
 	}
 
-	execute_unsafe_command_simple := func(command string) {
+	execute_unsafe_command_simple := func(command string) ([]error) {
+		var errors []error
 		cmd := exec.Command("bash", "-c", command)
-		cmd.Start()
-		cmd.Wait()
+		
+		start_error := cmd.Start()
+		if start_error != nil {
+			errors = append(errors, start_error)
+		}
+		
+		wait_error := cmd.Wait()
+		if wait_error != nil {
+			errors = append(errors, wait_error)
+		}
+
+		if len(errors) > 0 {
+			return errors
+		}
+
+		return nil
 	}
 
 	get_or_set_status := func(s string) string {
@@ -128,10 +143,10 @@ func NewBashCommand() *BashCommand {
 			cmd := exec.Command("bash", "-c", command + " &")
 			cmd.Start()
 		},
-		ExecuteUnsafeCommandSimple: func(command string) {
+		ExecuteUnsafeCommandSimple: func(command string) ([]error) {
 			lock.Lock()
 			defer lock.Unlock()
-			execute_unsafe_command_simple(command)
+			return execute_unsafe_command_simple(command)
 		},
 		ExecuteUnsafeCommandUsingFiles: func(command string, command_data string) ([]string, []error) {
 			lock.Lock()
