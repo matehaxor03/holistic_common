@@ -13,6 +13,11 @@ func GetDataDirectory() []string {
 	return directory
 }
 
+func GetUsersDirectory() []string {
+	directory := []string{"Volumes", "ramdisk", "Users"}
+	return directory
+}
+
 func EscapeString(value string, string_quote_value string) (string, error) {
 	if !(string_quote_value == "'" || string_quote_value == "\"") {
 		return "", fmt.Errorf(fmt.Sprintf("string_quote_value not supported: %s available values are ' or \"", string_quote_value))
