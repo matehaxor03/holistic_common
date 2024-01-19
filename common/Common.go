@@ -8,13 +8,25 @@ import (
 	crypto_rand "crypto/rand"
 )
 
+func GetBaseDirectoryNameMac() string {
+	return "Volumes"
+}
+
+func GetBaseDiskName() string {
+	return "holisticxyz_ramdisk_"
+}
+
+func GetBaseUsersDirectoryName() string {
+	return "Users"
+}
+
 func GetDataDirectory() []string {
-	directory := []string{"Volumes", "ramdisk"}
+	directory := []string{GetBaseDirectoryNameMac(), GetBaseDiskName()}
 	return directory
 }
 
 func GetUsersDirectory() []string {
-	directory := []string{"Volumes", "ramdisk", "Users"}
+	directory := []string{GetBaseDirectoryNameMac(), GetBaseDiskName(), GetBaseUsersDirectoryName()}
 	return directory
 }
 
